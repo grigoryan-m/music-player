@@ -32,17 +32,22 @@ document.addEventListener("DOMContentLoaded", (event)=>{
     const cover = document.getElementsByClassName("cover")[0];
     const title = document.getElementsByClassName("title")[0];
     const author = document.getElementsByClassName("author")[0];
-
+    const audioPlayer = document.getElementById("audio-player");
+    const progressSlider = document.getElementById("progress-slider");
+    progressSlider.value = 0;
+    let playing = false;
     // Get info on current track after DOM is loaded
 
-    get_info(bg, cover, title, author); // Pass variables as parameters
+    get_info(bg, cover, title, author, audioPlayer); // Pass variables as parameters
     
     // Run the function if next button is clicked
     const nextButton = document.getElementsByClassName("next")[0];
     nextButton.addEventListener("click", () => {
         if(current_track != tracks.length - 1){ // If it's not last track...
             current_track++; // ...go to next track...
-            get_info(bg, cover, title, author); // ...and get info about it.
+            playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+            playing = false;
+            get_info(bg, cover, title, author, audioPlayer); // ...and get info about it.
         }
     });
     
@@ -51,16 +56,80 @@ document.addEventListener("DOMContentLoaded", (event)=>{
     prevButton.addEventListener("click", ()=>{
         if(current_track != 0){ // If it's not first track...
             current_track--; // ...go to previous track...
-            get_info(bg, cover, title, author); // ...and get info about it.
+            playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+            playing = false;
+            get_info(bg, cover, title, author, audioPlayer); // ...and get info about it.
         }
     });
+
+    // Play function
+    const playButton = document.getElementsByClassName("play")[0];
+    playButton.addEventListener("click", ()=>{
+        if(playing){
+            playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+            playing = false;
+            audioPlayer.pause();
+        }else{
+            playButton.innerHTML = "<i class='fa-solid fa-pause'></i>";
+            playing = true;
+            audioPlayer.play();
+        }
+    });
+
+    // Change slider value depending on track time
+    audioPlayer.addEventListener("timeupdate", () => {
+        const currentTime = audioPlayer.currentTime;
+        const duration = audioPlayer.duration;
+        const progressPercent = (currentTime / duration) * 100;
+        progressSlider.value = progressPercent;
+    });
+
+    // Change track time depending on slider value
+    progressSlider.addEventListener("input", () => {
+        audioPlayer.currentTime = (progressSlider.value / 100) * audioPlayer.duration; 
+    });
+
+    // Add hotkeys
+
+    document.addEventListener('keydown', (event) => {
+        if(event.keyCode === 32 || event.keyCode === 75){
+            event.preventDefault();
+            if(playing){
+                audioPlayer.pause();
+                playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+                playing = false;
+            }else{
+                audioPlayer.play();
+                playing = true;
+                playButton.innerHTML = "<i class='fa-solid fa-pause'></i>";
+            }
+        }else if(event.keyCode === 76){
+            event.preventDefault();
+            if(current_track != tracks.length - 1){ // If it's not last track...
+                current_track++; // ...go to next track...
+                playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+                playing = false;
+                get_info(bg, cover, title, author, audioPlayer); // ...and get info about it.
+            }
+        }else if(event.keyCode === 74){
+            if(current_track != 0){ // If it's not first track...
+                current_track--; // ...go to previous track...
+                playButton.innerHTML = "<i class='fa-solid fa-play'></i>";
+                playing = false;
+                get_info(bg, cover, title, author, audioPlayer); // ...and get info about it.
+            }
+        }
+    });
+
 });
 
 // Function that gets info about current track.
 
-function get_info(bgElement, coverElement, titleElement, authorElement){
+function get_info(bgElement, coverElement, titleElement, authorElement, audioPlayer){
     coverElement.src = tracks[current_track].cover; // Change the cover
     bgElement.style.backgroundImage = `url(${tracks[current_track].cover})`; // Change background of the page
     titleElement.innerText = tracks[current_track].name; // Change the title of the track
     authorElement.innerText = tracks[current_track].author; // Change author of the track
+
+    audioPlayer.src = tracks[current_track].track;
 }
