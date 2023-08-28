@@ -89,6 +89,20 @@ document.addEventListener("DOMContentLoaded", (event)=>{
         audioPlayer.currentTime = (progressSlider.value / 100) * audioPlayer.duration; 
     });
 
+    // Change track if the one is finished
+
+    audioPlayer.addEventListener("ended", () =>{
+        if(current_track != tracks.length - 1){ // If it's not last track...
+            current_track++; // ...go to next track...   
+        }else{
+            current_track = 0;
+        }
+        playButton.innerHTML = "<i class='fa-solid fa-pause'></i>";
+            playing = true;
+            get_info(bg, cover, title, author, audioPlayer); // ...and get info about it.
+            audioPlayer.play();
+    });
+
     // Add hotkeys
 
     document.addEventListener('keydown', (event) => {
