@@ -9,8 +9,23 @@ JS code is commented.
 
 Few hotkeys are working: 
 
-Spacebar / K -> Pause/Play
-J -> Previous track
-L -> Next track
+<table>
+  <tr>
+    <th>Hotkey</th>
+    <th>Action</th>
+  </tr>
+  <tr>
+    <td>Spacebar/K</td>
+    <td>Play/Pause</td>
+  </tr>
+  <tr>
+    <td>J</td>
+    <td>Previous track</td>
+  </tr>
+  <tr>
+    <td>L</td>
+    <td>Next track</td>
+  </tr>
+</table>
 
 Thinking about adding 5-second timeskip with arrow buttons.
