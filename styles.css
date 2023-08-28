@@ -15,7 +15,6 @@
     height: 100vh;
     position: absolute;
     z-index: -20;
-    background-image: url("src/01-bnu-oxxxy/cover.png");
     background-repeat: no-repeat;
     background-position: center;
     background-size: cover;
@@ -53,7 +52,7 @@ hr{
     justify-content: space-around;
 }
 .cover{
-    max-width: 300px; 
+    max-height: 300px;
     margin-top: 20px;
 }
 .title{
